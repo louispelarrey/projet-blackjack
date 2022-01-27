@@ -1,77 +1,102 @@
 (async () => {
+  const startGameElement = document.getElementById("btn-start");
   const drawCardElement = document.getElementById("btn-draw");
   const stopGameElement = document.getElementById("btn-stop");
   const informationElement = document.getElementById("gameResult");
   const scoreElement = document.getElementById("score");
-  let stop = false;
-  let scoreValue = null;
-  let deckId = await getDeckId();
-  drawCardElement.addEventListener("click", async () => {
-    stop = false;
-    scoreValue = scoreElement.textContent;
-    let cardCode = await drawCard(deckId);
-    let score = await computeScore(cardCode, scoreValue);
-    scoreElement.textContent = score;
-    informationElement.textContent = await gameResult(score, stop);
-  });
-  stopGameElement.addEventListener("click", async () => {
-    stop = true;
-    scoreValue = scoreElement.textContent;
-    let cardCode = await drawCard(deckId);
-    let score = await computeScore(cardCode, scoreValue);
-    scoreElement.textContent = score;
-    console.log(stop);
-    informationElement.textContent = await gameResult(score, stop);
-  });
-})();
 
-async function gameResult(score, stop) {
-    if (stop == true) {
-        if (score > 21) {
-            return "You won ! :D";
-        } else {
-            return "You lost... :(";
-        }
+  let scoreValue = 0;
+  let deckId = null;
+  let inProgress = false;
+
+  const initButtons = (inProgress) => {
+    if (inProgress) {
+      drawCardElement.disabled = false;
+      stopGameElement.disabled = false;
+      startGameElement.disabled = true;
     } else {
-        if (score == 21) {
-            return "You won ! :D";
-        } else if (score > 21) {
-            return "You lost";
-        } else {
-            return "Game in progress."
-        }
+      drawCardElement.disabled = true;
+      stopGameElement.disabled = true;
+      startGameElement.disabled = false;
     }
-}
+  };
 
-async function getDeckId() {
-  let deckId = fetch(`https://deckofcardsapi.com/api/deck/new/`)
-    .then((res) => res.json())
-    .then((res) => {
-      return res.deck_id;
-    });
-  return deckId;
-}
+  const drawCard = async () => {
+    let cardCode = await drawCardApi(deckId);
+    scoreValue += await computeScore(cardCode, scoreValue);
+    scoreElement.textContent = scoreValue;
+    console.log("Current score : " + scoreValue);
+    if (scoreValue > 21) {
+      gameOver();
+    }
+  };
 
-async function drawCard(deckId) {
-  let result = fetch(
-    `https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`
-  )
-    .then((res) => res.json())
-    .then((res) => {
-      return res.cards[0].code;
-    });
-  return result;
-}
+  const stopGame = async () => {
+    await drawCard();
+    informationElement.textContent = scoreValue > 21 ? "You won !" : "You lost";
+    inProgress = false;
+    initButtons(inProgress);
+  };
 
-async function computeScore(cardCode, scoreValue) {
-  let cardParameters = cardCode.split("");
-  let cardValue = cardParameters[0];
-  switch (cardValue) {
-    case "A":
-      return parseInt(scoreValue) + 0;
-    case "J" || "Q" || "K":
-      return parseInt(scoreValue) + 10;
-    default:
-      return parseInt(scoreValue) + parseInt(cardValue);
+  const gameOver = () => {
+    informationElement.textContent =
+      scoreValue == 21 ? "You won !" : "You lost";
+    inProgress = false;
+    initButtons(inProgress);
+  };
+
+  const startGame = async () => {
+    scoreValue = 0;
+    deckId = await getDeckId();
+    scoreElement.textContent = 0;
+    informationElement.textContent = "Game in progress...";
+    inProgress = true;
+    initButtons(inProgress);
+  };
+
+  async function computeScore(cardCode) {
+    let cardValue = cardCode.slice(0, -1);
+    switch (cardValue) {
+      case "A":
+        return 0;
+      case "J":
+      case "Q":
+      case "K":
+        return 10;
+      default:
+        return parseInt(cardValue);
+    }
   }
-}
+
+  startGameElement.addEventListener("click", async () => {
+    startGame();
+  });
+
+  drawCardElement.addEventListener("click", async () => {
+    drawCard();
+  });
+
+  stopGameElement.addEventListener("click", async () => {
+    stopGame();
+  });
+
+  async function getDeckId() {
+    let deckId = fetch(`https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1`)
+      .then((res) => res.json())
+      .then((res) => {
+        return res.deck_id;
+      });
+    return deckId;
+  }
+
+  async function drawCardApi(deckId) {
+    let result = fetch(
+      `https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        return res.cards[0].code;
+      });
+    return result;
+  }
+})();
