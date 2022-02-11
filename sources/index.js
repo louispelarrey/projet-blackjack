@@ -22,22 +22,10 @@
     }
   };
 
-  startGameElement.addEventListener("click", async () => {
-    startGame();
-  });
-
-  drawCardElement.addEventListener("click", async () => {
-    drawCard();
-  });
-
-  stopGameElement.addEventListener("click", async () => {
-    stopGame();
-  });
-
   // Tirer une carte et ajouter la valeur au score
   const drawCard = async () => {
     let cardCode = await drawCardApi(deckId);
-    scoreValue += await computeScore(cardCode, scoreValue);
+    scoreValue += computeScore(cardCode, scoreValue);
     scoreElement.textContent = scoreValue;
     console.log("Current score : " + scoreValue);
     if (scoreValue > 21) {
@@ -53,6 +41,20 @@
     initButtons(inProgress);
   };
 
+  // Lancer une nouvelle partie.
+  const startGame = async () => {
+    scoreValue = 0;
+    deckId = getDeckId();
+    scoreElement.textContent = 0;
+    informationElement.textContent = "Game in progress...";
+    inProgress = true;
+    initButtons(inProgress);
+  };
+
+  startGameElement.addEventListener("click", startGame);
+  drawCardElement.addEventListener("click", drawCard);
+  stopGameElement.addEventListener("click", stopGame);
+
   // Arrêter la partie (score >= 21)
   const gameIsOver = () => {
     informationElement.textContent =
@@ -61,19 +63,9 @@
     initButtons(inProgress);
   };
 
-  // Lancer une nouvelle partie.
-  const startGame = async () => {
-    scoreValue = 0;
-    deckId = await getDeckId();
-    scoreElement.textContent = 0;
-    informationElement.textContent = "Game in progress...";
-    inProgress = true;
-    initButtons(inProgress);
-  };
-
-  // Paramètre : Code de la carte (2S,JD,KC,AH, ...). 
+  // Paramètre : Code de la carte (2S,JD,KC,AH, ...).
   // Retour : Valeur de la carte passée en paramètre (2S => 2, JD => 10, KC => 10, AH => 0, ...).
-  let computeScore = (cardCode) => {
+  const computeScore = (cardCode) => {
     let cardValue = cardCode.slice(0, -1);
     switch (cardValue) {
       case "A":
@@ -85,28 +77,91 @@
       default:
         return parseInt(cardValue);
     }
-  }
+  };
 
-  // Retour : Id du deck.
-  let getDeckId = async () => {
+  /*// Retour : Id du deck.
+  const getDeckId = () => {
+    secureFetch(`https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1`);
     let deckId = fetch(`https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1`)
       .then((res) => res.json())
       .then((res) => {
         return res.deck_id;
       });
     return deckId;
-  }
+  }*/
 
-  // Paramètre: Id du deck utilisé. 
+  // Retour : Id du deck.
+  /*const getDeckId = () => {
+    let deckId = secureFetch(
+      `https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1`
+    ).then((res => {
+      res.deck_id;
+    }))
+    console.log(deckId);
+    return deckId;
+  };*/
+
+  // Paramètre: Id du deck utilisé.
   // Retour: Carte piochée.
-  let drawCardApi = (deckId) => {
-    let result = fetch(
+  const drawCardApi = (deckId) => {
+    let result = secureFetch(
       `https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`
-    )
-      .then((res) => res.json())
-      .then((res) => {
+    ).then((res) => {
         return res.cards[0].code;
       });
+      console.log(result);
     return result;
-  }
+  };
+
+  /*let secureFetch = (url) => {
+    fetch(url)
+      .then((response) => {
+        console.log();
+        if (!response.ok) {
+          return Promise.reject(new Error("Bad status code"));
+        }
+        const hasContentType = response.headers.has("content-type");
+        const isJson = response.headers
+          .get("content-type")
+          .startsWith("application/json");
+
+        if (!hasContentType || !isJson) {
+          return Promise.reject(new Error("Bad content"));
+        }
+      return response.json()
+      }).catch((error) => {
+        console.error(error.message);
+      });
+  };*/
+
+  
+let secureFetch = (url) => {
+  fetch(url)
+    .then((response) => {
+    console.log(response);
+      if (!response.ok) {
+        return Promise.reject(new Error("Bad status code"));
+      }
+      const hasContentType = response.headers.has("content-type");
+      const isJson = response.headers
+        .get("content-type")
+        .startsWith("application/json");
+
+      if (!hasContentType || !isJson) {
+        return Promise.reject(new Error("Bad content"));
+      }
+    return response.json()
+    }).catch((error) => {
+      console.error(error.message);
+    });
+};
+
+const getDeckId = () => {
+  let deckId = secureFetch(
+    `https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1`
+  ).then((res => {
+    console.log(res.deck_id);
+  }))
+  console.log(deckId);
+}
 })();
