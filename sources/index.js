@@ -3,10 +3,12 @@ const drawCardElement = document.getElementById("btn-draw");
 const stopGameElement = document.getElementById("btn-stop");
 const informationElement = document.getElementById("gameResult");
 const scoreElement = document.getElementById("score");
+const availableCardsElement = document.getElementById("available-cards");
 
 let scoreValue = 0;
 let deckId = null;
 let inProgress = false;
+let availableCardsValue = 5;
 
 // Activation/Désactivation des boutons
 const initButtons = (inProgress) => {
@@ -25,8 +27,10 @@ const initButtons = (inProgress) => {
 const drawCard = async () => {
   let cardCode = await drawCardApi(deckId);
   scoreValue += await computeScore(cardCode, scoreValue);
+  availableCardsValue = await computeAvailableCards();
   scoreElement.textContent = scoreValue;
-  if (scoreValue > 21) {
+  availableCardsElement.textContent = availableCardsValue;
+  if (scoreValue > 21 || availableCardsValue === 0) {
     gameIsOver();
   }
 };
@@ -34,9 +38,11 @@ const drawCard = async () => {
 // Lancer une nouvelle partie.
 const startGame = async () => {
   scoreValue = 0;
+  availableCardsValue = 5;
   deckId = await getDeckId();
   scoreElement.textContent = 0;
-  informationElement.textContent = "Game in progress...";
+  availableCardsElement.textContent = 5;
+  informationElement.style.display = "none";
   inProgress = true;
   initButtons(inProgress);
 };
@@ -44,14 +50,16 @@ const startGame = async () => {
 // Arrêter la partie (clic sur bouton "stop")
 const stopGame = async () => {
   await drawCard();
-  informationElement.textContent = scoreValue > 21 ? "You won !" : "You lost";
+  informationElement.style.display = "inline-block";
+  informationElement.textContent = scoreValue > 21 ? "Gagné !" : "Perdu !";
   inProgress = false;
   initButtons(inProgress);
 };
 
 // Arrêter la partie (score >= 21)
 const gameIsOver = () => {
-  informationElement.textContent = scoreValue == 21 ? "You won !" : "You lost";
+  informationElement.style.display = "inline-block";
+  informationElement.textContent = scoreValue == 21 ? "Gagné !" : "Perdu !";
   inProgress = false;
   initButtons(inProgress);
 };
@@ -75,6 +83,12 @@ const computeScore = async (cardCode) => {
       return parseInt(cardValue);
   }
 };
+
+const computeAvailableCards = async () => {
+  let availableCardsValue = parseInt(availableCardsElement.textContent);
+  availableCardsValue--;
+  return availableCardsValue;
+}
 
 // Retour : Id du deck.
 const getDeckId = () => {
