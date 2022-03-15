@@ -80,6 +80,15 @@ img {
   padding: 10px;
 }
 
+#available-cards,
+#score {
+  display: inline-block;
+}
+
+#gameResult {
+  display: none;
+}
+
 .player-actions {
   margin: auto;
   display: flex;
