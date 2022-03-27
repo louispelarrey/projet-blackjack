@@ -1,0 +1,124 @@
+body {
+  background: url(../img/iron-grip.png) repeat;
+  background-color: #566160;
+  font-family: Tahoma, Geneva, sans-serif;
+}
+
+h1 {
+  margin: 2rem;
+  text-align: center;
+  color: white;
+}
+
+h2 {
+  font-size: 26px;
+  color: #051900;
+}
+
+.game-container {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  perspective: 1000px;
+}
+
+#game-area {
+  position: relative;
+  height: 60vh;
+  top: 3.9vmin;
+  bottom: 0;
+  left: 2.5vmin;
+  right: 2.5vmin;
+  margin: 1.5vmin;
+  z-index: 1;
+  width: 100%;
+  padding: 0 2rem 2rem 2rem;
+  background-color: #8b8857;
+  border-radius: 25vmin;
+  border: 1.7vmin solid #2c2e2d;
+  box-shadow: inset 0 0.63vmin 3vmin -0.15vmin rgb(0 0 0 / 75%), inset 0px 0px 0px 0.3vmin #2e2e2e, 0px 0px 0px 0.15vmin #8b8857, 0vmin 3.5vmin 4vmin -0.8vmin rgb(0 0 0 / 65%);
+  background: #488548;
+}
+
+#player-cards {
+  display: flex;
+  justify-content: center;
+  height: 168px;
+}
+
+button:hover {
+  cursor: pointer;
+  color: white;
+}
+
+img {
+  width: 130px;
+  height: 190px;
+}
+
+.player {
+  position: absolute;
+  bottom: 25px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+
+.player-infos {
+  position: relative;
+  background: linear-gradient(#3f3f3f, #191919);
+  color: #ccc;
+  box-sizing: border-box;
+  border-color: #777;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 4px;
+  margin: auto;
+  height: 100px;
+  width: 40%;
+  font-size: x-large;
+  padding: 10px;
+}
+
+#available-cards,
+#score {
+  display: inline-block;
+}
+
+#gameResult {
+  display: none;
+}
+
+.player-actions {
+  margin: auto;
+  display: flex;
+  height: 80px;
+  width: 50%;
+  background-color: aliceblue;
+  border-radius: 5px;
+  padding: 10px;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+button {
+  width: 30%;
+  height: 100%;
+  font-size: x-large;
+}
+
+.username {
+  text-align: center;
+}
+
+.lower-infos {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 10px;
+}
+
+@media (min-width: 1200px) {
+  body {
+    padding: 0 12%;
+  }
+}
