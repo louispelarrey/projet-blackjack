@@ -58,7 +58,8 @@ const stopGame = async () => {
 
 // Arrêter la partie (score >= 21)
 const gameIsOver = () => {
-  informationElement.style.display = "inline-block";
+  informationElement.style.display = "inline-block";  
+  window.navigator.vibrate([100,30,100,30,100,30]);
   informationElement.textContent = scoreValue == 21 ? "Gagné !" : "Perdu !";
   inProgress = false;
   initButtons(inProgress);
