@@ -122,3 +122,24 @@ button {
     padding: 0 12%;
   }
 }
+
+#player-area {
+  position: absolute;
+  display: flex;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 40%;
+  justify-content: space-between;
+}
+
+#deck-cards > img {
+  position: absolute;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+#player-cards > img {
+  position: absolute;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  transform: rotate(9deg);
+}

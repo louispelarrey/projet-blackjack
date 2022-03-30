@@ -1,14 +1,23 @@
+import { Deck } from "./librairy/entities/Deck.js";
+import { Cards } from "./librairy/entities/Cards.js";
+import { secureFetch } from "./librairy/fetch.js";
+
 const startGameElement = document.getElementById("btn-start");
 const drawCardElement = document.getElementById("btn-draw");
 const stopGameElement = document.getElementById("btn-stop");
 const informationElement = document.getElementById("gameResult");
 const scoreElement = document.getElementById("score");
 const availableCardsElement = document.getElementById("available-cards");
+const playerCardsElement = document.getElementById("player-cards");
+const deckCardsElement = document.getElementById("deck-cards");
 
 let scoreValue = 0;
-let deckId = null;
 let inProgress = false;
 let availableCardsValue = 5;
+let playerCards = [];
+let remainingCards = 0;
+//const DeckObject = new Deck();
+const CardObject = new Cards();
 
 // Activation/Désactivation des boutons
 const initButtons = (inProgress) => {
@@ -25,7 +34,9 @@ const initButtons = (inProgress) => {
 
 // Tirer une carte et ajouter la valeur au score
 const drawCard = async () => {
-  let cardCode = await drawCardApi(deckId);
+  let card = await drawCardApi(DeckObject.deckId);
+  let cardCode = card.code;
+  showCard(card);
   scoreValue += await computeScore(cardCode, scoreValue);
   availableCardsValue = await computeAvailableCards();
   scoreElement.textContent = scoreValue;
@@ -39,9 +50,9 @@ const drawCard = async () => {
 const startGame = async () => {
   scoreValue = 0;
   availableCardsValue = 5;
-  deckId = await getDeckId();
   scoreElement.textContent = 0;
   availableCardsElement.textContent = 5;
+  empty(playerCardsElement)
   informationElement.style.display = "none";
   inProgress = true;
   initButtons(inProgress);
@@ -49,7 +60,7 @@ const startGame = async () => {
 
 // Arrêter la partie (clic sur bouton "stop")
 const stopGame = async () => {
-  await drawCard();
+  CardObject.drawCard();
   informationElement.style.display = "inline-block";
   informationElement.textContent = scoreValue > 21 ? "Gagné !" : "Perdu !";
   inProgress = false;
@@ -65,7 +76,7 @@ const gameIsOver = () => {
 };
 
 startGameElement.addEventListener("click", startGame);
-drawCardElement.addEventListener("click", drawCard);
+drawCardElement.addEventListener("click", CardObject.drawCard);
 stopGameElement.addEventListener("click", stopGame);
 
 // Paramètre : Code de la carte (2S,JD,KC,AH, ...).
@@ -90,44 +101,37 @@ const computeAvailableCards = async () => {
   return availableCardsValue;
 }
 
-// Retour : Id du deck.
-const getDeckId = () => {
-  let deckId = secureFetch(
-    `https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1`
-  ).then((res) => {
-    return res.deck_id;
-  });
-  return deckId;
-};
-
 // Paramètre: Id du deck utilisé.
 // Retour: Carte piochée.
-const drawCardApi = async (deckId) => {
+const drawCardApi = deckId => {
   let result = secureFetch(
     `https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`
   ).then((res) => {
-    return res.cards[0].code;
+    remainingCards = res.remainingCards;
+    deckCardsElement.removeChild(deckCardsElement.getElementsByTagName('img')[deckCardsElement.getElementsByTagName('img').length-1])
+    return res.cards[0];
   });
   return result;
 };
 
-// Paramètre: URL (Appel API).
-// Retour: Promesse.
-let secureFetch = async (url) => {
-  try {
-    let response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("Bad status code");
-    }
-    const hasContentType = response.headers.has("content-type");
-    const isJson = response.headers
-      .get("content-type")
-      .startsWith("application/json");
-    if (!hasContentType || !isJson) {
-      throw new Error("Bad content");
-    }
-    return await response.json();
-  } catch (error) {
-    return Promise.reject(error);
+const showCard = card => {
+  const cardDomElement = document.createElement("img")
+  playerCards.push(card)
+  cardDomElement.src = card.image;
+  randomRotate(cardDomElement)
+  playerCardsElement.appendChild(cardDomElement)
+}
+
+const empty = element => {
+  while (element.firstElementChild) {
+    element.firstElementChild.remove();
   }
-};
+}
+
+const randomRotate = cardDomElement => {
+  cardDomElement.style.transform = "rotate(" + randomIntFromInterval(-45, 45) + "deg)"
+}
+
+const randomIntFromInterval = (min, max) => { // min and max included 
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
