@@ -11,13 +11,12 @@ class Deck {
         this.initDeckFront()
     }
 
-    initDeck() {
-        secureFetch(
+    async initDeck() {
+        const res = await secureFetch(
             `https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1`
-        ).then((res) => {
-            this._deckId = res.deck_id
-            this._remainingCards = res.remaining
-        });
+        );
+        this._deckId = res.deck_id;
+        this._remainingCards = res.remaining;
     }
 
     initDeckFront() {

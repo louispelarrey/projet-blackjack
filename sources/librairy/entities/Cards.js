@@ -13,17 +13,21 @@ class Cards extends Game {
     _img;
     _code;
 
+    constructor() {
+        super()
+    }
+
     // Tirer une carte et ajouter la valeur au score
     drawCard = async () => {
-        let card = await this.drawCardApi(super.DeckObject.deckId);
+        let card = await this.drawCardApi(this.DeckObject.deckId);
         let cardCode = card.code;
         this.showCard(card);
-        super.scoreValue += super.computeScore(cardCode);
-        super.availableCardsValue = await super.computeAvailableCards();
-        super.scoreElement.textContent = super.scoreValue.toString();
-        super.availableCardsElement.textContent = super.availableCardsValue.toString();
-        if (super.scoreValue > 21 || super.availableCardsValue === 0) {
-            super.gameIsOver();
+        this.scoreValue += this.computeScore(cardCode);
+        this.availableCardsValue = await this.computeAvailableCards();
+        this.scoreElement.textContent = this.scoreValue.toString();
+        this.availableCardsElement.textContent = this.availableCardsValue.toString();
+        if (this.scoreValue > 21 || this.availableCardsValue === 0) {
+            this.gameIsOver();
         }
     }
 
@@ -33,19 +37,19 @@ class Cards extends Game {
         const res = await secureFetch(
             `https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=1`
         );
-        super.remainingCards = res.remainingCards;
-        super.deckCardsElement.removeChild(
-            super.deckCardsElement.getElementsByTagName('img')[super.deckCardsElement.getElementsByTagName('img').length - 1]
+        this.remainingCards = res.remainingCards;
+        this.deckCardsElement.removeChild(
+            this.deckCardsElement.getElementsByTagName('img')[this.deckCardsElement.getElementsByTagName('img').length - 1]
         );
         return res.cards[0];
     }
 
     showCard = card => {
         const cardDomElement = document.createElement("img")
-        super.playerCards.push(card)
+        this.playerCards.push(card)
         cardDomElement.src = card.image;
         this.randomRotate(cardDomElement)
-        super.playerCardsElement.appendChild(cardDomElement)
+        this.playerCardsElement.appendChild(cardDomElement)
     }
 
     randomRotate = cardDomElement => {

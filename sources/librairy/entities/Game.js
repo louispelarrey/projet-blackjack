@@ -1,10 +1,12 @@
 export { Game }
 
+import { Cards } from "./Cards.js";
 import { Deck } from "./Deck.js"
 
 class Game {
 
     _DeckObject = new Deck();
+    _CardObject = new Cards();
 
     _scoreValue = 0;
     _inProgress = false;
@@ -23,14 +25,15 @@ class Game {
 
     // Lancer une nouvelle partie.
     startGame = () => {
-        this._scoreValue = 0;
-        this._availableCardsValue = 5;
-        this._scoreElement.textContent = "0";
-        this._availableCardsElement.textContent = "5";
-        this.empty(this._playerCardsElement)
-        this._informationElement.style.display = "none";
-        this._inProgress = true;
-        this.initButtons(this._inProgress);
+        this.scoreValue = 0;
+        this.availableCardsValue = 5;
+        this.scoreElement.textContent = "0";
+        this.availableCardsElement.textContent = "5";
+        this.empty(this.playerCardsElement)
+        this.informationElement.style.display = "none";
+        this.inProgress = true;
+        this.initButtons(this.inProgress);
+        this.initListeners();
     };
 
     computeScore = cardCode => {
@@ -48,28 +51,28 @@ class Game {
     };
 
     computeAvailableCards = async () => {
-        let availableCardsValue = parseInt(this._availableCardsElement.textContent);
+        let availableCardsValue = parseInt(this.availableCardsElement.textContent);
         availableCardsValue--;
         return availableCardsValue;
     }
 
     gameIsOver = () => {
-        this._informationElement.style.display = "inline-block";
-        this._informationElement.textContent = this._scoreValue === 21 ? "Gagné !" : "Perdu !";
-        this._inProgress = false;
+        this.informationElement.style.display = "inline-block";
+        this.informationElement.textContent = this.scoreValue === 21 ? "Gagné !" : "Perdu !";
+        this.inProgress = false;
         this.initButtons(this.inProgress);
     };
 
     // Activation/Désactivation des boutons
     initButtons = inProgress => {
         if (inProgress) {
-            this._drawCardElement.disabled = false;
-            this._stopGameElement.disabled = false;
-            this._startGameElement.disabled = true;
+            this.drawCardElement.disabled = false;
+            this.stopGameElement.disabled = false;
+            this.startGameElement.disabled = true;
         } else {
-            this._drawCardElement.disabled = true;
-            this._stopGameElement.disabled = true;
-            this._startGameElement.disabled = false;
+            this.drawCardElement.disabled = true;
+            this.stopGameElement.disabled = true;
+            this.startGameElement.disabled = false;
         }
     };
 
