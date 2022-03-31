@@ -36,14 +36,12 @@ class Game {
         this.informationElement.style.display = "none";
         this.inProgress = true;
         this.initButtons(this.inProgress);
-        //this.initListeners();
     };
 
     // // Arrêter la partie (clic sur bouton "stop")
-    stopGame = () => {
-        this.drawCard();
+    stopGame = async () => {
+        await this.drawCard();
         this.informationElement.style.display = "inline-block";
-        console.log(this.scoreValue);
         this.informationElement.textContent = this.scoreValue > 21 ? "Gagné !" : "Perdu !";
         this.inProgress = false;
         this.initButtons(this.inProgress);
@@ -58,7 +56,7 @@ class Game {
         this.scoreElement.textContent = this.scoreValue.toString();
         this.availableCardsElement.textContent = this.availableCardsValue.toString();
         if (this.scoreValue > 21 || this.availableCardsValue === 0) {
-            this.gameIsOver();
+            await this.gameIsOver();
         }
     }
 
@@ -82,7 +80,7 @@ class Game {
         return availableCardsValue;
     }
 
-    gameIsOver = () => {
+    gameIsOver = async () => {
         this.informationElement.style.display = "inline-block";
         this.informationElement.textContent = this.scoreValue === 21 ? "Gagné !" : "Perdu !";
         this.inProgress = false;
