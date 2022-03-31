@@ -55,7 +55,7 @@ class Game {
         this.availableCardsValue = await this.computeAvailableCards();
         this.scoreElement.textContent = this.scoreValue.toString();
         this.availableCardsElement.textContent = this.availableCardsValue.toString();
-        if (this.scoreValue > 21 || this.availableCardsValue === 0) {
+        if (this.scoreValue >= 21 || this.availableCardsValue === 0) {
             await this.gameIsOver();
         }
     }
