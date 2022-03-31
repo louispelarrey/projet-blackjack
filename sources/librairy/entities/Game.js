@@ -1,3 +1,4 @@
+
 export { Game }
 
 import { Cards } from "./Cards.js";
@@ -5,9 +6,11 @@ import { Deck } from "./Deck.js"
 
 class Game {
 
-    _DeckObject = new Deck();
-    _CardObject = new Cards();
+    cards = null;
 
+    constructor(cards){
+        this.cards = cards;
+    }
     _scoreValue = 0;
     _inProgress = false;
     _availableCardsValue = 5;
@@ -33,8 +36,31 @@ class Game {
         this.informationElement.style.display = "none";
         this.inProgress = true;
         this.initButtons(this.inProgress);
-        this.initListeners();
+        //this.initListeners();
     };
+
+    // // Arrêter la partie (clic sur bouton "stop")
+    stopGame = () => {
+        this.drawCard();
+        this.informationElement.style.display = "inline-block";
+        console.log(this.scoreValue);
+        this.informationElement.textContent = this.scoreValue > 21 ? "Gagné !" : "Perdu !";
+        this.inProgress = false;
+        this.initButtons(this.inProgress);
+    };
+
+    // Tirer une carte et ajouter la valeur au score
+    drawCard = async () => {
+        let card = await this.cards.drawCardApi(this.cards.deck.deckId);
+        this.cards.showCard(card);
+        this.scoreValue += this.computeScore(card.code);
+        this.availableCardsValue = await this.computeAvailableCards();
+        this.scoreElement.textContent = this.scoreValue.toString();
+        this.availableCardsElement.textContent = this.availableCardsValue.toString();
+        if (this.scoreValue > 21 || this.availableCardsValue === 0) {
+            this.gameIsOver();
+        }
+    }
 
     computeScore = cardCode => {
         let cardValue = cardCode.slice(0, -1);

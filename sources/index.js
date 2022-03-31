@@ -10,7 +10,7 @@ const informationElement = document.getElementById("gameResult");
 const scoreElement = document.getElementById("score");
 const availableCardsElement = document.getElementById("available-cards");
 const playerCardsElement = document.getElementById("player-cards");
-const deckCardsElement = document.getElementById("deck-cards");
+
 
 // let scoreValue = 0;
 // let inProgress = false;
@@ -18,12 +18,13 @@ const deckCardsElement = document.getElementById("deck-cards");
 // let playerCards = [];
 // let remainingCards = 0;
 //const DeckObject = new Deck();
+let DeckObject = new Deck();
+let CardObject = new Cards(DeckObject);
+const GameObject = new Game(CardObject);
 
-const GameObject = new Game();
-
-this.startGameElement.addEventListener("click", GameObject.startGame());
-this.drawCardElement.addEventListener("click", GameObject.CardObject.drawCard());
-this.stopGameElement.addEventListener("click", GameObject.stopGame());
+startGameElement.addEventListener("click", GameObject.startGame);
+drawCardElement.addEventListener("click", GameObject.drawCard);
+stopGameElement.addEventListener("click", GameObject.stopGame);
 
 // Activation/Désactivation des boutons
 // const initButtons = (inProgress) => {
