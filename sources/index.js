@@ -30,6 +30,16 @@ startGameElement.addEventListener("click", GameObject.startGame);
 drawCardElement.addEventListener("click", GameObject.drawCard);
 stopGameElement.addEventListener("click", GameObject.stopGame);
 
+document.addEventListener("keypress", async (event) => {
+  switch (event.key) {
+    case 'd':
+      GameObject.drawCard();
+      break;
+    case 'c':
+      //TO DO
+      break;
+  }
+});
 /*
 window.addEventListener("load", (event) => {
   statusDisplayElement.textContent = (PlayerObject.checkOnlineStatus())
