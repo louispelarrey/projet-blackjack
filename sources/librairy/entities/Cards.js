@@ -18,8 +18,8 @@ class Cards {
     _deck;
     _playerCards = [];
 
-    constructor(_deck) {
-        this._deck = _deck;
+    constructor(deck) {
+        this._deck = deck;
     }
 
     // Paramètre: Id du deck utilisé.
