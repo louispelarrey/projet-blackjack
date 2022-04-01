@@ -2,7 +2,6 @@ export { Deck };
 import { secureFetch } from "../fetch.js";
 
 class Deck {
-
     _deckId;
     _remainingCards;
 
@@ -31,4 +30,16 @@ class Deck {
     get deckId() {
         return this._deckId;
     };
+
+    get remainingCards () {
+        return this._remainingCards
+    }
+
+    set remainingCards(value) {
+        this._remainingCards = value;
+    }
+
+    set deckId(value) {
+        this._deckId = value;
+    }
 }

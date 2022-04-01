@@ -15,11 +15,11 @@ const deckCardsElement = document.getElementById("deck-cards");
 class Cards {
     _img;
     _code;
-    _deck;
+    _Deck;
     _playerCards = [];
 
-    constructor(deck) {
-        this._deck = deck;
+    constructor(Deck) {
+        this._Deck = Deck;
     }
 
     // Paramètre: Id du deck utilisé.
@@ -59,7 +59,11 @@ class Cards {
         return this._code;
     };
 
-    get deck() {
-        return this._deck;
+    get Deck() {
+        return this._Deck;
     };
+
+    set Deck(value) {
+        this._Deck = value;
+    }
 }

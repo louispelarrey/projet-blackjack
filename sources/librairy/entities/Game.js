@@ -5,12 +5,12 @@ import { Cards } from "./Cards.js";
 import { Deck } from "./Deck.js"
 
 class Game {
+    _Cards;
 
-    cards = null;
-
-    constructor(cards){
-        this.cards = cards;
+    constructor(Cards){
+        this._Cards = Cards;
     }
+
     _scoreValue = 0;
     _inProgress = false;
     _availableCardsValue = 5;
@@ -49,14 +49,29 @@ class Game {
 
     // Tirer une carte et ajouter la valeur au score
     drawCard = async () => {
-        let card = await this.cards.drawCardApi(this.cards.deck.deckId);
-        this.cards.showCard(card);
+        let card = await this.Cards.drawCardApi(this.Cards.Deck.deckId);
+        this.Cards.showCard(card);
+        this.Cards.Deck.remainingCards--;
+        this.checkRemainingCards();
         this.scoreValue += this.computeScore(card.code);
         this.availableCardsValue = await this.computeAvailableCards();
         this.scoreElement.textContent = this.scoreValue.toString();
         this.availableCardsElement.textContent = this.availableCardsValue.toString();
         if (this.scoreValue >= 21 || this.availableCardsValue === 0) {
             await this.gameIsOver();
+        }
+    }
+
+    async checkRemainingCards() {
+        switch (this.Cards.Deck.remainingCards) {
+            case 1:
+                await this.stopGame();
+                break;
+            case 0:
+                this.Cards.Deck = new Deck();
+                break;
+            default:
+                break;
         }
     }
 
@@ -216,5 +231,13 @@ class Game {
 
     get deckCardsElement() {
         return this._deckCardsElement;
+    }
+
+    get Cards() {
+        return this._Cards;
+    }
+
+    set Cards(value) {
+        this._Cards = value;
     }
 }
