@@ -33,11 +33,19 @@ stopGameElement.addEventListener("click", GameObject.stopGame);
 document.addEventListener("keypress", async (event) => {
   switch (event.key) {
     case 'd':
+      if (GameObject.inProgress)
       GameObject.drawCard();
       break;
     case 'c':
       //TO DO
       break;
+    case 'n':
+      if (GameObject.inProgress) // && (ability to restart after the first draw)
+      GameObject.startGame();
+      break;
+    case 's':
+      if (GameObject.inProgress)
+      GameObject.stopGame();
   }
 });
 /*
