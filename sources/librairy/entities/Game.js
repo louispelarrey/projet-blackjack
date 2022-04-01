@@ -62,6 +62,8 @@ class Game {
         }
     }
 
+    
+
     async checkRemainingCards() {
         switch (this.Cards.Deck.remainingCards) {
             case 1:
@@ -97,6 +99,7 @@ class Game {
 
     gameIsOver = async () => {
         this.informationElement.style.display = "inline-block";
+        console.log(window.navigator.vibrate([100,30,100,30,100,30]));
         this.informationElement.textContent = this.scoreValue === 21 ? "Gagné !" : "Perdu !";
         this.inProgress = false;
         this.initButtons(this.inProgress);

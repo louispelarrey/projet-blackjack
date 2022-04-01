@@ -22,11 +22,9 @@ window.addEventListener('offline', () => statusDisplayElement.textContent = 'Off
 // let playerCards = [];
 // let remainingCards = 0;
 //const DeckObject = new Deck();
-let PlayerObject = new Player();
 let DeckObject = new Deck();
 let CardObject = new Cards(DeckObject);
 const GameObject = new Game(CardObject);
-
 
 startGameElement.addEventListener("click", GameObject.startGame);
 drawCardElement.addEventListener("click", GameObject.drawCard);
