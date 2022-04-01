@@ -1,16 +1,20 @@
 import { Deck } from "./librairy/entities/Deck.js";
 import { Cards } from "./librairy/entities/Cards.js";
+import { Player } from "./librairy/entities/Player.js";
 import { secureFetch } from "./librairy/fetch.js";
 import { Game } from "./librairy/entities/Game.js";
 
 const startGameElement = document.getElementById("btn-start");
 const drawCardElement = document.getElementById("btn-draw");
 const stopGameElement = document.getElementById("btn-stop");
+const statusDisplayElement = document.getElementById("status-display");
 const informationElement = document.getElementById("gameResult");
 const scoreElement = document.getElementById("score");
 const availableCardsElement = document.getElementById("available-cards");
 const playerCardsElement = document.getElementById("player-cards");
-
+    
+window.addEventListener('online', () => statusDisplayElement.textContent = 'Online');
+window.addEventListener('offline', () => statusDisplayElement.textContent = 'Offline');
 
 // let scoreValue = 0;
 // let inProgress = false;
@@ -18,13 +22,27 @@ const playerCardsElement = document.getElementById("player-cards");
 // let playerCards = [];
 // let remainingCards = 0;
 //const DeckObject = new Deck();
+let PlayerObject = new Player();
 let DeckObject = new Deck();
 let CardObject = new Cards(DeckObject);
 const GameObject = new Game(CardObject);
 
+
 startGameElement.addEventListener("click", GameObject.startGame);
 drawCardElement.addEventListener("click", GameObject.drawCard);
 stopGameElement.addEventListener("click", GameObject.stopGame);
+
+/*
+window.addEventListener("load", (event) => {
+  statusDisplayElement.textContent = (PlayerObject.checkOnlineStatus())
+        ? "Online"
+        : "Offline";
+  });
+  setInterval(() => {
+      const result =  PlayerObject.checkOnlineStatus();
+      console.log(result)
+      statusDisplayElement.textContent = result ? "Online" : "Offline";
+    }, 3000);
 
 // Activation/Désactivation des boutons
 // const initButtons = (inProgress) => {
@@ -37,7 +55,7 @@ stopGameElement.addEventListener("click", GameObject.stopGame);
 //     stopGameElement.disabled = true;
 //     startGameElement.disabled = false;
 //   }
-// };
+// };*/
 
 // // Tirer une carte et ajouter la valeur au score
 // const drawCard = async () => {
