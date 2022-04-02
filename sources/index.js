@@ -7,8 +7,8 @@ const drawCardElement = document.getElementById("btn-draw");
 const stopGameElement = document.getElementById("btn-stop");
 const statusDisplayChildElement = document.getElementById("status-display").firstElementChild;
 
-let DeckObject = new Deck();
-let CardObject = new Cards(DeckObject);
+const DeckObject = new Deck();
+const CardObject = new Cards(DeckObject);
 const GameObject = new Game(CardObject);
 
 startGameElement.addEventListener("click", GameObject.startGame);
