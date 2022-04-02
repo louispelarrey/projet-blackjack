@@ -1,17 +1,11 @@
 import { Deck } from "./librairy/entities/Deck.js";
 import { Cards } from "./librairy/entities/Cards.js";
-import { Player } from "./librairy/entities/Player.js";
-import { secureFetch } from "./librairy/fetch.js";
 import { Game } from "./librairy/entities/Game.js";
 
 const startGameElement = document.getElementById("btn-start");
 const drawCardElement = document.getElementById("btn-draw");
 const stopGameElement = document.getElementById("btn-stop");
 const statusDisplayChildElement = document.getElementById("status-display").firstElementChild;
-const informationElement = document.getElementById("gameResult");
-const scoreElement = document.getElementById("score");
-const availableCardsElement = document.getElementById("available-cards");
-const playerCardsElement = document.getElementById("player-cards");
 
 let DeckObject = new Deck();
 let CardObject = new Cards(DeckObject);
@@ -37,6 +31,7 @@ document.addEventListener("keypress", async (event) => {
     case 's':
       if (GameObject.inProgress)
       GameObject.stopGame();
+      break;
   }
 });
 

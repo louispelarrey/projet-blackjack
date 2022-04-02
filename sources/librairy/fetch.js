@@ -1,7 +1,7 @@
 export { secureFetch }
 // Paramètre: URL (Appel API).
 // Retour: Promesse.
-let secureFetch = async (url) => {
+const secureFetch = async url => {
     try {
         let response = await fetch(url);
         if (!response.ok) {
