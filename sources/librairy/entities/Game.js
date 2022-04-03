@@ -63,8 +63,6 @@ class Game {
         }
     }
 
-    
-
     async checkRemainingCards() {
         switch (this.Cards.Deck.remainingCards) {
             case 1:

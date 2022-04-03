@@ -5,17 +5,10 @@ import { Game } from "./librairy/entities/Game.js";
 const startGameElement = document.getElementById("btn-start");
 const drawCardElement = document.getElementById("btn-draw");
 const stopGameElement = document.getElementById("btn-stop");
-const statusDisplayElement = document.getElementById("status-display");
-const informationElement = document.getElementById("gameResult");
-const scoreElement = document.getElementById("score");
-const availableCardsElement = document.getElementById("available-cards");
-const playerCardsElement = document.getElementById("player-cards");
-    
-window.addEventListener('online', () => statusDisplayElement.textContent = 'Online');
-window.addEventListener('offline', () => statusDisplayElement.textContent = 'Offline');
+const statusDisplayChildElement = document.getElementById("status-display").firstElementChild;
 
-let DeckObject = new Deck();
-let CardObject = new Cards(DeckObject);
+const DeckObject = new Deck();
+const CardObject = new Cards(DeckObject);
 const GameObject = new Game(CardObject);
 
 startGameElement.addEventListener("click", GameObject.startGame);
@@ -38,5 +31,15 @@ document.addEventListener("keypress", async (event) => {
     case 's':
       if (GameObject.inProgress)
       GameObject.stopGame();
+      break;
   }
+});
+
+window.addEventListener('online', () => {
+    statusDisplayChildElement.style.color = "green"
+    statusDisplayChildElement.style.borderColor = "green"
+});
+window.addEventListener('offline', () => {
+    statusDisplayChildElement.style.color = "red"
+    statusDisplayChildElement.style.borderColor = "red"
 });

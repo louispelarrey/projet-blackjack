@@ -143,3 +143,22 @@ button {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   transform: rotate(9deg);
 }
+
+.iconify {
+  font-size: 4em;
+  padding: 8px;
+  border: 3px solid green;
+  border-radius: 50%;
+  border-bottom-left-radius: 25%;
+  background-color: #e0fff5;
+  color: green;
+}
+
+#status-display {
+  position: fixed;
+  right: 60px;
+  top: 20px;
+  z-index: 100;
+  right: 2%;
+  opacity: 85%;
+}
