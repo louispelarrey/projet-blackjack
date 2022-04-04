@@ -21,8 +21,6 @@ class Game {
     _drawCardElement = document.getElementById("btn-draw");
     _stopGameElement = document.getElementById("btn-stop");
     _informationElement = document.getElementById("gameResult");
-    _modalElement = document.getElementById("modal-element");
-    _resultElement = document.getElementById("result");
     _scoreElement = document.getElementById("score");
     _availableCardsElement = document.getElementById("available-cards");
     _playerCardsElement = document.getElementById("player-cards");
@@ -43,10 +41,10 @@ class Game {
     // // Arrêter la partie (clic sur bouton "stop")
     stopGame = async () => {
         await this.drawCard();
+        await this.gameIsOver();
         this.informationElement.style.display = "inline-block";
         window.navigator.vibrate([100,30,100,30,100,30]);
-        this.resultElement.textContent = this.informationElement.textContent = this.scoreValue > 21 ? "Gagné !" : "Perdu !";
-        this.modalElement.style.display = "block";
+        this.scoreValue > 21 ? this.onWin() : this.onLose();
         this.inProgress = false;
         this.initButtons(this.inProgress);
     };
@@ -67,11 +65,18 @@ class Game {
         }
     }
 
+    onWin = () => {
+        this.informationElement.textContent = "Gagné !";
+    }
+
+    onLose = () => {
+        this.informationElement.textContent = "Perdu !";
+    }
+
     gameIsOver = async () => {
         this.informationElement.style.display = "inline-block";
         window.navigator.vibrate([100,30,100,30,100,30]);
-        this.resultElement.textContent = this.informationElement.textContent = this.scoreValue === 21 ? "Gagné !" : "Perdu !";
-        this.modalElement.style.display = "block";
+        this.scoreValue === 21 ? this.onWin() : this.onLose();
         this.inProgress = false;
         this.initButtons(this.inProgress);
     }
@@ -220,20 +225,12 @@ class Game {
         return this._drawCardElement;
     }
 
-    get modalElement() {
-        return this._modalElement;
-    }
-
     get stopGameElement() {
         return this._stopGameElement;
     }
 
     get informationElement() {
         return this._informationElement;
-    }
-
-    get resultElement() {
-        return this._resultElement;
     }
 
     get scoreElement() {
