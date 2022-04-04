@@ -21,6 +21,8 @@ class Game {
     _drawCardElement = document.getElementById("btn-draw");
     _stopGameElement = document.getElementById("btn-stop");
     _informationElement = document.getElementById("gameResult");
+    _modalElement = document.getElementById("modal-element");
+    _resultElement = document.getElementById("result");
     _scoreElement = document.getElementById("score");
     _availableCardsElement = document.getElementById("available-cards");
     _playerCardsElement = document.getElementById("player-cards");
@@ -42,7 +44,9 @@ class Game {
     stopGame = async () => {
         await this.drawCard();
         this.informationElement.style.display = "inline-block";
-        this.informationElement.textContent = this.scoreValue > 21 ? "Gagné !" : "Perdu !";
+        window.navigator.vibrate([100,30,100,30,100,30]);
+        this.resultElement.textContent = this.informationElement.textContent = this.scoreValue > 21 ? "Gagné !" : "Perdu !";
+        this.modalElement.style.display = "block";
         this.inProgress = false;
         this.initButtons(this.inProgress);
     };
@@ -61,6 +65,15 @@ class Game {
         if (this.scoreValue >= 21 || this.availableCardsValue === 0) {
             await this.gameIsOver();
         }
+    }
+
+    gameIsOver = async () => {
+        this.informationElement.style.display = "inline-block";
+        window.navigator.vibrate([100,30,100,30,100,30]);
+        this.resultElement.textContent = this.informationElement.textContent = this.scoreValue === 21 ? "Gagné !" : "Perdu !";
+        this.modalElement.style.display = "block";
+        this.inProgress = false;
+        this.initButtons(this.inProgress);
     }
 
     async checkRemainingCards() {
@@ -96,14 +109,6 @@ class Game {
         return availableCardsValue;
     }
 
-    gameIsOver = async () => {
-        this.informationElement.style.display = "inline-block";
-        console.log(window.navigator.vibrate([100,30,100,30,100,30]));
-        this.informationElement.textContent = this.scoreValue === 21 ? "Gagné !" : "Perdu !";
-        this.inProgress = false;
-        this.initButtons(this.inProgress);
-    };
-
     // Activation/Désactivation des boutons
     initButtons = inProgress => {
         if (inProgress) {
@@ -121,6 +126,10 @@ class Game {
         while (element.firstElementChild) {
             element.firstElementChild.remove();
         }
+    }
+
+    modalMessage = () => {
+
     }
 
     set DeckObject(value) {
@@ -211,12 +220,20 @@ class Game {
         return this._drawCardElement;
     }
 
+    get modalElement() {
+        return this._modalElement;
+    }
+
     get stopGameElement() {
         return this._stopGameElement;
     }
 
     get informationElement() {
         return this._informationElement;
+    }
+
+    get resultElement() {
+        return this._resultElement;
     }
 
     get scoreElement() {

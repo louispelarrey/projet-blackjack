@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
+    <script src="./librairy/rotate/pleaseRotate.js"></script>
 </head>
 
 <body>
@@ -28,6 +29,12 @@
     </div>
 
     <div class="player">
+        <div class="player-actions">
+            <button id="btn-start">Nouvelle partie</button>
+            <button id="btn-draw" disabled>Piocher</button>
+            <button id="btn-stop" disabled>Je m'arrête</button>
+        </div>
+
         <div class="player-infos">
             <div class="upper-infos">
                 <div class="username">Joueur 1</div>
@@ -46,13 +53,16 @@
             </div>
         </div>
 
-        <div class="player-actions">
-            <button id="btn-start">Nouvelle partie</button>
-            <button id="btn-draw" disabled>Piocher</button>
-            <button id="btn-stop" disabled>Je m'arrête</button>
-        </div>
     </div>
 
+    <!-- The Modal -->
+    <div id="modal-element" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">x</span>
+            <div id ="result"></div>
+        </div>
+    </div>
     <script type="module" src="./index.js"></script>
 </body>
 
