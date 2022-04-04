@@ -5,8 +5,6 @@ import { Game } from "./librairy/entities/Game.js";
 const startGameElement = document.getElementById("btn-start");
 const drawCardElement = document.getElementById("btn-draw");
 const stopGameElement = document.getElementById("btn-stop");
-const modalElement = document.getElementById("modal-element");
-const closeModalElement = document.getElementsByClassName("close")[0];
 const statusDisplayChildElement = document.getElementById("status-display").firstElementChild;
 
 const DeckObject = new Deck();
@@ -45,15 +43,3 @@ window.addEventListener('offline', () => {
     statusDisplayChildElement.style.color = "red"
     statusDisplayChildElement.style.borderColor = "red"
 });
-
-// When the user clicks on <span> (x), close the modal
-closeModalElement.onclick = function() {
-  modalElement.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modalElement) {
-    modalElement.style.display = "none";
-  }
-}
